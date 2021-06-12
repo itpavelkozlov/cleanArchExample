@@ -16,6 +16,13 @@ type LoggerImp struct {
 	log *logrus.Logger
 }
 
+func NewLogger() Logger {
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.SetOutput(os.Stdout)
+	logrus.SetLevel(logrus.DebugLevel)
+	return &LoggerImp{log: logrus.New()}
+}
+
 func (l LoggerImp) Info(msg interface{}) {
 	l.log.Info(msg)
 }
@@ -30,13 +37,4 @@ func (l LoggerImp) Error(msg interface{}) {
 
 func (l LoggerImp) Debug(msg interface{}) {
 	l.log.Debug(msg)
-}
-
-func NewLogger() Logger {
-	logrus.SetFormatter(&logrus.JSONFormatter{})
-	logrus.SetOutput(os.Stdout)
-	logrus.SetLevel(logrus.DebugLevel)
-	return &LoggerImp{
-		log: logrus.New(),
-	}
 }
