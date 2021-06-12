@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-func NewHttpServer(r *chi.Mux) http.Server {
-	return http.Server{
+func NewHttpServer(r *chi.Mux) *http.Server {
+	return &http.Server{
 		ReadTimeout:       1 * time.Second,
 		WriteTimeout:      1 * time.Second,
 		IdleTimeout:       30 * time.Second,

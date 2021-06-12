@@ -1,32 +1,16 @@
 package main
 
 import (
-	"cleanArch/internal/repository/mongo"
-	"cleanArch/internal/resolver"
-	"cleanArch/internal/server"
-	"cleanArch/internal/service/service"
-	"cleanArch/pkg/logger"
-	"cleanArch/pkg/mongodb"
+	"cleanArch/wire"
 	"context"
-	"os"
+	"log"
 )
 
 func main() {
 	ctx := context.Background()
-	log := logger.NewLogger()
-	log.Info("Application starting")
-
-	db, err := mongodb.NewMongoDB(ctx, log)
+	app, err := wire.InitializeApplication(ctx)
 	if err != nil {
-		log.Error("Can not start database")
-		os.Exit(1)
+		log.Fatal("Failed initialize app", err.Error())
 	}
-	log.Info("Mongodb started")
-	userRepo := mongo.NewUserRepo(db)
-	userService := service.NewUserService(userRepo, log)
-	r := resolver.NewResolver(userService, log)
-	router := server.NewRouter(r)
-	httpServer := server.NewHttpServer(router)
-
-	httpServer.ListenAndServe()
+	app.HttpServer.ListenAndServe()
 }
